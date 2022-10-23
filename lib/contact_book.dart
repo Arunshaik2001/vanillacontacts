@@ -1,24 +1,28 @@
+import 'package:flutter/material.dart';
+
 import 'contact.dart';
 
-class ContactBook {
-  ContactBook._sharedInstance();
+class ContactBook extends ValueNotifier<List<Contact>> {
+  ContactBook._sharedInstance() : super([]);
 
   static final _shared = ContactBook._sharedInstance();
 
   factory ContactBook() => _shared;
 
-  final List<Contact> _contacts = [];
-
-  int get length => _contacts.length;
+  int get length => value.length;
 
   void add({required Contact contact}) {
-    _contacts.add(contact);
+    value.add(contact);
+    notifyListeners();
   }
 
   void remove({required Contact contact}) {
-    _contacts.remove(contact);
+    if(value.contains(contact)) {
+      value.remove(contact);
+      notifyListeners();
+    }
   }
 
   Contact? contactAt({required int atIndex}) =>
-      _contacts.length > atIndex ? null : _contacts[atIndex];
+      value.length > atIndex ? null : value[atIndex];
 }
